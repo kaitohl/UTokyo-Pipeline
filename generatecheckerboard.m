@@ -1,32 +1,33 @@
-% Create checkerboard
+% iPad screen resolution
+screen_width_px = 2388;
+screen_height_px = 1668;
 
-pixperinch = 264;
+% Checkerboard specs
+square_px = 104;
+cols = 10;
+rows = 7;
+board_width = cols * square_px;
+board_height = rows * square_px;
 
-mmperinch = 25.4;
+% Ensure checkerboard is large enough
+% Generate more than needed, then crop
+tiles_x = ceil(board_width / (2*square_px)) + 1;
+tiles_y = ceil(board_height / (2*square_px)) + 1;
 
-pixpermm = pixperinch/mmperinch;
+% Generate and crop to exact checkerboard size
+J_board = checkerboard(square_px, tiles_y, tiles_x) > 0.5;
+J_board = J_board(1:board_height, 1:board_width);
 
-desiredpixpersquare = 208;
+% Create full white canvas
+J_full = ones(screen_height_px, screen_width_px);  % 1 = white
 
-mmpersquare = desiredpixpersquare/pixpermm;
+% Center the checkerboard on the canvas
+start_x = floor((screen_width_px - board_width) / 2) + 1;
+start_y = floor((screen_height_px - board_height) / 2) + 1;
 
-y = 7;
+% Insert checkerboard
+J_full(start_y:start_y + board_height - 1, ...
+       start_x:start_x + board_width - 1) = J_board;
 
-x = 10;
-
-J_full = checkerboard(desiredpixpersquare, ceil(x/2) , ceil(y/2)) > 0.5;
-
-J = J_full(1:x*desiredpixpersquare,1:y*desiredpixpersquare);
-
-imshow(J)
-
-
-dpi = 264; % native iPad PPI
-
-figure('Units','inches','Position',[0 0 size(J,2)/dpi size(J,1)/dpi]);
-imshow(J, 'InitialMagnification', 'fit');
-axis off;
-set(gca, 'Position', [0 0 1 1]);
-
-% Export as PDF (best for preserving size)
-print('checkerboard_true_size', '-dpdf', ['-r' num2str(dpi)]);
+% Save as PNG
+imwrite(J_full, 'checkerboard_2388x1668.png');
