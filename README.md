@@ -1,5 +1,8 @@
 # UTokyo-Pipeline
 
+- Checkerboard folder contains images of the checkerboard used for calibration.
+- STL Files folder contains STL file of the cluster and stereoscope camera and the camera holder.
+
 # Term Translation
 
 base2gripper = optical origin to cluster
@@ -56,8 +59,18 @@ LZ 1920x1080: 0.3019 px
 - **Main error came from creating the transformation matrix. Important to read in Motive data as INTRISIC rotations.**
 - The next section of workflow2.ipynb performs hand-eye calibration.The Shah method for hand-eye calibration was used. The average RMS reprojection error was **8.95 pixels**. This was calculated by reprojecting the checkerboard points using the estimated hand-eye transformation and camera intrinsics/extrinsics.
 - Another validation step was to check the loop closure error. The average RMS rotation error was **0.005 degrees** and the average RMS translation error was **1.31 mm**.
-- Attached is a visualization of the detected corners and reprojected corners using the estimated hand-eye transformation.
+- Attached is a visualization of the detected corners and reprojected corners using the estimated hand-eye transformation with an error of **8.69 pixels**. See reprojex.png.
 
 <img width="1600" height="1200" alt="reprojex" src="https://github.com/user-attachments/assets/04e3609d-8de7-4ba0-827b-e0a3d61f9449" />
 
+## 6. Testing
 
+- Collected a new dataset of checkerboard images and mocap data.
+- Used workflow2.ipynb to process the images and mocap data.
+- Mocap data captured the cluster in different poses on the stereo camera
+- Mocap data also captured the tip of the forceps in 5 different positions, touching the checkerboard at different corners.
+- The idea is to move the forceps tip from motion capture space, into checkerboard world space using the estimated hand-eye transformation.
+- The error metric is the distance from the forceps tip to the corresponding checkerboard corner in world space.
+- The average distance error between the predicted tip position and the corresponding checkerboard corner was **20.34 mm**.
+- The large error is likely due to the inaccuracy of the tip location tracked by the motion capture system. The tip was tracked using pivot calibration; however, the tip is not very sharp causing the calibration to be inaccurate.
+- The next steps would be to improve the accuracy of the tip location in motion capture space. This could be done by using a sharper tip, or using a different method to track the tip.
