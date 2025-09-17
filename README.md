@@ -57,5 +57,3 @@ LZ 1920x1080: 0.3019 px
 - The next section of workflow2.ipynb performs hand-eye calibration.The Shah method for hand-eye calibration was used. The average RMS reprojection error was **8.95 pixels**. This was calculated by reprojecting the checkerboard points using the estimated hand-eye transformation and camera intrinsics/extrinsics.
 - Another validation step was to check the loop closure error. The average RMS rotation error was **0.005 degrees** and the average RMS translation error was **1.31 mm**.
 - Attached is a visualization of the detected corners and reprojected corners using the estimated hand-eye transformation.
-
-  ![Example](UTokyo-Pipeline/reprojex.png)
